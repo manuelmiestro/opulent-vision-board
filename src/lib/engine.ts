@@ -364,7 +364,7 @@ export function alignmentInsights(state: AppState): Insight[] {
           id: `behind-${g.id}`,
           tone: "gold",
           title: `"${g.title}" is behind its timeline`,
-          body: `${left} days left and ${pct}% done. Consider narrowing the scope or moving the date, so the goal stays believable.`,
+          body: `${left} ${left === 1 ? "day" : "days"} left and ${pct}% done. Consider narrowing the scope or moving the date, so the goal stays believable.`,
           href: `/goals/${g.id}`,
         });
       }

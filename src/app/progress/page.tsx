@@ -106,7 +106,7 @@ function ProgressView() {
       <Card className="mb-4">
         <div className="flex items-center justify-between">
           <Eyebrow>Last 4 weeks</Eyebrow>
-          <span className="text-[12px] text-faint">{achieved} goals achieved</span>
+          <span className="text-[12px] text-faint">{achieved} {achieved === 1 ? "goal" : "goals"} achieved</span>
         </div>
         <div className="mt-4 grid grid-cols-7 gap-1.5" aria-label="Active days">
           {Array.from({ length: 28 }).map((_, i) => {

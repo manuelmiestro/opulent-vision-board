@@ -287,7 +287,7 @@ function PreviewStep({ state, name, onEnter }: { state: AppState; name: string; 
             {state.goals.map((g) => (
               <li key={g.id} className="flex justify-between gap-3 text-[14px]">
                 <span className="truncate">{g.title}</span>
-                <span className="shrink-0 text-faint">{g.milestones.length} steps</span>
+                <span className="shrink-0 text-faint">{g.milestones.length} {g.milestones.length === 1 ? "step" : "steps"}</span>
               </li>
             ))}
           </ul>

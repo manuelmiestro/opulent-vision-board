@@ -219,7 +219,7 @@ function BoardCard({ state }: { state: AppState }) {
     <Link href="/board" className="rise block rounded-2xl border border-line bg-charcoal p-5 transition hover:border-gold/40">
       <div className="flex items-center justify-between">
         <Eyebrow>Your vision board</Eyebrow>
-        <span className="text-[12px] text-faint">{state.vision.length} pieces</span>
+        <span className="text-[12px] text-faint">{state.vision.length} {state.vision.length === 1 ? "piece" : "pieces"}</span>
       </div>
       {items.length ? (
         <div className="mt-3 grid grid-cols-4 gap-2">

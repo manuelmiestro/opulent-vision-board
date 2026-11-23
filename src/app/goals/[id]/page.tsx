@@ -97,7 +97,7 @@ function GoalDetail() {
           {g.deadline && (
             <div className="text-right">
               <p className="text-[13px] text-muted">{formatDate(g.deadline)}</p>
-              <p className={cx("text-[12px]", daysLeft! < 0 ? "text-rose" : "text-faint")}>{daysLeft! < 0 ? `${-daysLeft!} days past` : `${daysLeft} days left`}</p>
+              <p className={cx("text-[12px]", daysLeft! < 0 ? "text-rose" : "text-faint")}>{daysLeft! < 0 ? `${-daysLeft!} ${-daysLeft! === 1 ? "day" : "days"} past` : `${daysLeft} ${daysLeft === 1 ? "day" : "days"} left`}</p>
             </div>
           )}
         </div>
