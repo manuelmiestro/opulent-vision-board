@@ -41,8 +41,8 @@ function byText(goal: Goal): string {
 /** Personalised affirmations, tied to the user's real goals and progress. */
 export function localAffirmations(state: AppState, count = 3, seed = Date.now()): { text: string; goalId?: string; action?: string }[] {
   const goals = activeGoals(state);
-  const hold = state.profile.vision.holdingBack.trim();
-  const feels = state.profile.vision.successFeels.trim();
+  const hold = state.profile.vision.holdingBack.trim().replace(/[.!]+$/, "");
+  const feels = state.profile.vision.successFeels.trim().replace(/[.!]+$/, "");
   const out: { text: string; goalId?: string; action?: string }[] = [];
   const ordered = prioritise(goals);
   let i = seed % 7;
@@ -77,7 +77,7 @@ export function localAffirmations(state: AppState, count = 3, seed = Date.now())
     i += 3;
   }
   if (out.length < count && hold) {
-    out.push({ text: `I release ${lowerFirst(hold)}. It no longer decides what I am capable of.` });
+    out.push({ text: `${hold.charAt(0).toUpperCase()}${hold.slice(1)} no longer decides what I am capable of. I move forward anyway.` });
   }
   if (out.length < count && feels) {
     out.push({ text: `I already know how success feels: ${lowerFirst(feels)}. I choose that feeling today.` });
@@ -151,9 +151,15 @@ export function localMilestones(goal: Pick<Goal, "category" | "horizon" | "deadl
   const start = new Date();
   const end = goal.deadline ? parseDay(goal.deadline) : addDays(start, horizonDays(goal.horizon));
   const span = Math.max(7, Math.round((end.getTime() - start.getTime()) / 86_400_000));
+  // The first three steps are weekly, so they land in the next few weeks; the rest spread out to the deadline.
+  const weekly = Math.min(3, base.length);
+  const lastWeekly = Math.min(span, 7 * weekly);
   return base.map((title, idx) => {
-    const frac = (idx + 1) / base.length;
-    const due = addDays(start, Math.max(3, Math.round(span * frac)));
+    const offset =
+      idx < weekly
+        ? Math.min(span, 7 * (idx + 1))
+        : Math.round(lastWeekly + ((span - lastWeekly) * (idx - weekly + 1)) / (base.length - weekly));
+    const due = addDays(start, Math.max(3, offset));
     return {
       id: uid(),
       title,
