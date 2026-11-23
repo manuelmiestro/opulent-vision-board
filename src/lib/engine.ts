@@ -293,7 +293,12 @@ export function scoreTrend(state: AppState): { delta: number; trend: Trend; hist
   }
   const now = clarityIndex(state).score;
   const weekAgoKey = day(addDays(new Date(), -7));
-  const weekAgo = state.scores[weekAgoKey] ?? clarityIndex(state, addDays(new Date(), -7)).score;
+  const started = state.profile.createdAt.slice(0, 10);
+  // A new account has no week to compare yet, so measure from its first recorded score.
+  const weekAgo =
+    started > weekAgoKey
+      ? (history[0]?.score ?? now)
+      : (state.scores[weekAgoKey] ?? clarityIndex(state, addDays(new Date(), -7)).score);
   const delta = now - weekAgo;
   const trend: Trend = delta >= 3 ? "improving" : delta <= -3 ? "slipping" : "stable";
   return { delta, trend, history };
@@ -408,6 +413,16 @@ export function alignmentInsights(state: AppState): Insight[] {
     });
   }
 
+  const anyDone = goals.some((g) => g.milestones.some((m) => m.done));
+  if (!out.length && goals.length && !anyDone) {
+    out.push({
+      id: "fresh",
+      tone: "gold",
+      title: "Your plan is set. Now take the first step.",
+      body: `Tick off "${todaysPriorities(state, 1)[0]?.label ?? "your first milestone"}" this week. One finished step does more for your momentum than a perfect plan.`,
+      href: "/home",
+    });
+  }
   if (!out.length && goals.length) {
     out.push({
       id: "aligned",
