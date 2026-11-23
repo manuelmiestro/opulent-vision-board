@@ -82,7 +82,7 @@ function Journal() {
         <Card className="mb-5">
           <div className="flex items-center justify-between">
             <Eyebrow>Emotional pattern</Eyebrow>
-            <span className="text-[12px] text-faint">last {mood.byDay.length} entries</span>
+            <span className="text-[12px] text-faint">{mood.byDay.length === 1 ? "1 day so far" : `last ${mood.byDay.length} days`}</span>
           </div>
           <div className="mt-4 flex h-20 items-end gap-1.5" aria-label="Mood by day">
             {mood.byDay.map((d) => (
